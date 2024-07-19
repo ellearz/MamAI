@@ -1,0 +1,4 @@
+{
+    "search.searchEditor.reusePriorSearchConfiguration": true,
+    "typescript.workspaceSymbols.excludeLibrarySymbols": false
+}

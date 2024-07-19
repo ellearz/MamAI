@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423569769236",
+    "project_id": "motherai-440e9",
+    "storage_bucket": "motherai-440e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423569769236:android:7ec9b742e3d03f832cf801",
+        "android_client_info": {
+          "package_name": "com.example.mother_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4qLuWyvMC2Jn5SwjlYoCd04Tsle3E00M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
