@@ -6,8 +6,6 @@ import 'package:mother_ai/components/constant.dart';
 import 'package:mother_ai/model/chat_model.dart';
 import 'package:mother_ai/theme/theme.dart';
 
-
-
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
@@ -18,10 +16,11 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   TextEditingController promptController = TextEditingController();
   final model = GenerativeModel(
-    model: 'gemini-pro', 
-    apiKey: myApiKey!,
-    generationConfig: GenerationConfig(maxOutputTokens: 100)
-    ); // Replace with your actual API key
+      model: 'gemini-1.5-flash-latest',
+      apiKey: myApiKey!,
+      generationConfig: GenerationConfig(maxOutputTokens: 400));
+
+  // Replace with your actual API key
 
   final List<ChatModel> prompt = [];
 
@@ -53,7 +52,8 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         prompt.add(ChatModel(
           isPrompt: false,
-          message: 'I can only answer questions related to motherhood, baby, or pregnancy. Please try again.',
+          message:
+              'I can only answer questions related to motherhood, baby, or pregnancy. Please try again.',
           time: DateTime.now(),
         ));
       });
@@ -62,7 +62,35 @@ class _ChatPageState extends State<ChatPage> {
 
   // Helper function to check if the message is related to motherhood, baby, or pregnancy
   bool _isMotherhoodRelated(String message) {
-    final keywords = ['motherhood', 'mom', 'baby', 'pregnancy', 'child', 'newborn'];
+    final keywords = [
+      'motherhood',
+      'mom',
+      'baby',
+      'pregnancy',
+      'child',
+      'newborn',
+      'nurturing',
+      'caring',
+      'loving',
+      'maternal',
+      'supportive',
+      'protective',
+      'devoted',
+      'infant',
+      'toddler',
+      'cherub',
+      'parenting',
+      'breastfeeding',
+      'diapers',
+      'cradle',
+      'nursery',
+      'stroller',
+      'teething',
+      'pacifier',
+      'swaddling',
+      'milestones',
+      'sleep'
+    ];
     for (final keyword in keywords) {
       if (message.toLowerCase().contains(keyword)) {
         return true;
@@ -74,11 +102,12 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
       appBar: AppBar(
-        elevation: 3,
-        backgroundColor:  const Color(0xFFAF6480),
+        elevation: 5,
+        backgroundColor: const Color.fromARGB(255, 54, 134, 114),
         title: const Text('Ask MamAI'),
+        centerTitle: true,
       ),
       body: GradientBackground(
         child: Padding(
@@ -89,19 +118,20 @@ class _ChatPageState extends State<ChatPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 143, 148, 152), // Light blue background
+                  color: const Color.fromARGB(255, 213, 212, 196),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
                   'Ask MamAI anything related to motherhood or your baby\'s development.',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontWeight: FontWeight.w100,
+                    fontSize: 10,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 10), // Add some space between the bar and the chat
+              const SizedBox(
+                  height: 10), // Add some space between the bar and the chat
               Expanded(
                 child: ListView.builder(
                   itemCount: prompt.length,
@@ -125,7 +155,7 @@ class _ChatPageState extends State<ChatPage> {
                         controller: promptController,
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 20,
+                          fontSize: 12,
                         ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -141,11 +171,11 @@ class _ChatPageState extends State<ChatPage> {
                       },
                       child: const CircleAvatar(
                         radius: 29,
-                        backgroundColor: Colors.amber,
+                        backgroundColor: Color.fromARGB(255, 47, 124, 83),
                         child: Icon(
                           Icons.send,
                           color: Colors.white,
-                          size: 32,
+                          size: 20,
                         ),
                       ),
                     )
@@ -172,7 +202,9 @@ class _ChatPageState extends State<ChatPage> {
         right: isPrompt ? 15 : 80,
       ),
       decoration: BoxDecoration(
-        color: isPrompt ? const Color.fromARGB(255, 154, 185, 155) : const Color.fromARGB(255, 147, 144, 144),
+        color: isPrompt
+            ? const Color.fromARGB(255, 154, 185, 155)
+            : const Color.fromARGB(255, 213, 212, 196),
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(20),
           topRight: const Radius.circular(20),
@@ -187,14 +219,14 @@ class _ChatPageState extends State<ChatPage> {
             message,
             style: TextStyle(
               fontWeight: isPrompt ? FontWeight.bold : FontWeight.normal,
-              fontSize: 18,
+              fontSize: 12,
               color: isPrompt ? Colors.white : Colors.black,
             ),
           ),
           Text(
             date,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               color: isPrompt ? Colors.white : Colors.black,
             ),
           ),
@@ -203,4 +235,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-

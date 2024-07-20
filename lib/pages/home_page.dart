@@ -1,15 +1,19 @@
-
 import 'package:mother_ai/components/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:mother_ai/pages/chat_page.dart';
 import 'package:mother_ai/pages/milestone_page.dart';
 import 'package:mother_ai/pages/recipe_page.dart';
 import 'package:mother_ai/pages/side_bar.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'package:mother_ai/theme/theme.dart';
- // For loading lorem ipsum text
+
+final apiKey = myApiKey;
+final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: myApiKey!);
+final generationConfig = GenerationConfig(
+  maxOutputTokens: 30,
+  temperature: 0.9,
+);
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,58 +23,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-   String _quote = 'You are being your Best Version of a Mom';
-  // String quote = InspirationQuotes.getRandomQuote();
+  String _quote = 'You are being your Best Version of a Mom';
+  bool isLoading = false;
 
-  // void _generateRandomQuote() {
-  //   setState(() {
-  //     quote = InspirationQuotes.getRandomQuote();
-  //   });
-  // }
-Future<void> _getQuoteFromGemini() async {
-    const apiEndpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent'; // Replace with actual Gemini API endpoint
-  // Replace with your actual API key
-
-    final body = jsonEncode({
-      'prompt': 'Generate an inspiring quote for a mom, something short and heartfelt.',
-      'temperature': 0.7, // Adjust for creativity
-      'maxOutputTokens': 50, // Limit output length
+  Future<void> _getQuoteFromGemini() async {
+    setState(() {
+      isLoading = true;
     });
 
-    final headers = {
-      'Authorization': 'Bearer $myApiKey',
-      'Content-Type': 'application/json',
-    };
-
     try {
-      final response = await http.post(Uri.parse(apiEndpoint), headers: headers, body: body);
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _quote = data['text'];
-        });
-      } else {
-        print('Error: ${response.statusCode}');
-        setState(() {
-          _quote = 'Error fetching quote. Please try again.';
-        });
-      }
-    } catch (error) {
-      print('Error: $error');
+      final content = [
+        Content.text(
+            'I am a Mom.Generate for me one sentence motivational quote')
+      ];
+      final response = await model.generateContent(content,
+          generationConfig: generationConfig);
+
       setState(() {
-        _quote = 'Error fetching quote. Please try again.';
+        _quote = response.text ?? 'You are amazing human being';
+      });
+    } catch (e) {
+      setState(() {
+        _quote = 'Enjoy your day,sunshine';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: logo,
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(0, 47, 175, 143),
       ),
       drawer: const SideBar(), // Add the sidebar here
@@ -84,7 +72,7 @@ Future<void> _getQuoteFromGemini() async {
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[500],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
@@ -92,13 +80,22 @@ Future<void> _getQuoteFromGemini() async {
                   children: [
                     Text(
                       _quote,
-                      style: const TextStyle(fontSize: 18,),
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: _getQuoteFromGemini,
-                      child: const Text('😊',),
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              '😊',
+                              style: TextStyle(fontSize: 24),
+                            ),
                     ),
                   ],
                 ),
@@ -110,17 +107,24 @@ Future<void> _getQuoteFromGemini() async {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavigationBox(context, 'Baby Recipe ', 'Let\'s generate a lovely recipe together','assets/recipe.jpg', const RecipePage()),
-                  _buildNavigationBox(context, 'Baby Milestones ', 'To Note you baby imporant milestones','assets/baby_milestones.jpg',const MilestonePage()),
-                 
-                
+                  _buildNavigationBox(
+                      context,
+                      'Baby Recipe ',
+                      'Let\'s generate a lovely recipe together',
+                      'assets/recipe.jpg',
+                      const RecipePage()),
+                  _buildNavigationBox(
+                      context,
+                      'Baby Milestones ',
+                      'Note you baby\'s imporant milestones',
+                      'assets/baby_milestones.jpg',
+                      const MilestonePage()),
                   _buildNavigationBox(
                     context,
-                    'Chat AI',
+                    'Ask AI',
                     'I am here to assist you with baby, motherhood related topics',
                     'assets/chatAI.jpg',
                     const ChatPage(),
-            
                   ),
                 ],
               ),
@@ -131,7 +135,8 @@ Future<void> _getQuoteFromGemini() async {
     );
   }
 
-  Widget _buildNavigationBox(BuildContext context, String title, String subtitle,String imagePath, Widget destinationPage) {
+  Widget _buildNavigationBox(BuildContext context, String title,
+      String subtitle, String imagePath, Widget destinationPage) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -144,10 +149,10 @@ Future<void> _getQuoteFromGemini() async {
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
-            ),
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.7), BlendMode.darken)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
@@ -157,23 +162,22 @@ Future<void> _getQuoteFromGemini() async {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 18,
-                    color: Color.fromARGB(255, 50, 2, 58),
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 227, 237, 228),
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                subtitle,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white70,
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Color.fromARGB(255, 250, 255, 254),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
               ],
             ),
-
           ),
         ),
       ),

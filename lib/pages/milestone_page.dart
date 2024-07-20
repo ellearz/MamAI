@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:mother_ai/model/milestone.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-
-
 class MilestonePage extends StatefulWidget {
   const MilestonePage({super.key});
 
@@ -25,14 +23,16 @@ class _MilestonePageState extends State<MilestonePage> {
     'Laughing'
   ];
   final Box<Milestone> milestoneBox = Hive.box<Milestone>('milestones');
-  final Box<Milestone> fixedMilestoneBox = Hive.box<Milestone>('fixed_milestones');
+  final Box<Milestone> fixedMilestoneBox =
+      Hive.box<Milestone>('fixed_milestones');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Milestones'),
-        backgroundColor: const  Color.fromARGB(0, 36, 140, 114),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 54, 134, 114),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -69,7 +69,8 @@ class _MilestonePageState extends State<MilestonePage> {
     DateTime? date = fixedMilestoneBox.get(title)?.date;
 
     return Container(
-      color: const Color.fromARGB(255, 13, 110, 69), // Light purple background color
+      color: const Color.fromARGB(
+          255, 238, 238, 238), // Light purple background color
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +88,8 @@ class _MilestonePageState extends State<MilestonePage> {
                 onPressed: () async {
                   final selectedDate = await _selectDate(context, date);
                   if (selectedDate != null) {
-                    fixedMilestoneBox.put(title, Milestone(title: title, date: selectedDate));
+                    fixedMilestoneBox.put(
+                        title, Milestone(title: title, date: selectedDate));
                     setState(() {});
                   }
                 },
@@ -136,7 +138,8 @@ class _MilestonePageState extends State<MilestonePage> {
     );
   }
 
-  Future<DateTime?> _selectDate(BuildContext context, DateTime? initialDate) async {
+  Future<DateTime?> _selectDate(
+      BuildContext context, DateTime? initialDate) async {
     return showDatePicker(
       context: context,
       initialDate: initialDate ?? DateTime.now(),

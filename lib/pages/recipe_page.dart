@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mother_ai/components/constant.dart';
-
-import 'package:mother_ai/components/geminiai_service.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mother_ai/theme/theme.dart';
 
-
+final apiKey = myApiKey;
+final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: myApiKey!);
 
 class RecipePage extends StatefulWidget {
   const RecipePage({super.key});
@@ -18,7 +18,6 @@ class _RecipePageState extends State<RecipePage> {
   final TextEditingController productsController = TextEditingController();
   String? recipe;
   bool isLoading = false;
-  final geminiAIService = GeminiaiService(myApiKey!);
 
   void getRecipe() async {
     setState(() {
@@ -30,10 +29,14 @@ class _RecipePageState extends State<RecipePage> {
       String products = productsController.text.isNotEmpty
           ? productsController.text
           : 'only with the ingredients suitable for baby\'s age';
+      final content = [
+        Content.text(
+            'Create a baby recipe for a baby aged $age months using these products: $products')
+      ];
 
-      final response = await geminiAIService.getRecipe(age, products);
+      final response = await model.generateContent(content);
       setState(() {
-        recipe = response;
+        recipe = response.text;
       });
     } catch (e) {
       setState(() {
@@ -49,40 +52,46 @@ class _RecipePageState extends State<RecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
       appBar: AppBar(
         title: const Text('Baby Recipe Generator'),
-        backgroundColor:  const Color.fromARGB(0, 47, 175, 143),
+        backgroundColor: const Color.fromARGB(255, 54, 134, 114),
       ),
       body: GradientBackground(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: ageController,
-                decoration: const InputDecoration(labelText: 'Baby\'s Age (ex. 11 months)'),
-              ),
-              TextField(
-                controller: productsController,
-                decoration: const InputDecoration(
-                  labelText: 'Products (optional)',
-                  hintText: 'Enter products or leave blank',
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: ageController,
+                  decoration: const InputDecoration(
+                    labelText: 'Baby\'s Age (ex. 11 months)',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: getRecipe,
-                child: const Text('Get Recipe'),
-              ),
-              const SizedBox(height: 16),
-              if (isLoading)
-                const CircularProgressIndicator()
-              else if (recipe != null)
-                Text(
-                  recipe!,
-                  style: const TextStyle(fontSize: 16),
+                TextField(
+                  controller: productsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Products (optional)',
+                    hintText: 'Enter products or leave blank',
+                  ),
                 ),
-            ],
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: getRecipe,
+                  child: const Text('Get Recipe'),
+                ),
+                const SizedBox(height: 16),
+                if (isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else if (recipe != null)
+                  Text(
+                    recipe!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

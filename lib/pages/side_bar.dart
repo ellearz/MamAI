@@ -7,72 +7,65 @@ import 'package:mother_ai/pages/recipe_page.dart';
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
-   @override
+  @override
   State<SideBar> createState() => _SideBarState();
 }
 
 class _SideBarState extends State<SideBar> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+        color: const Color.fromARGB(255, 9, 141, 125),
         width: 288,
         height: double.infinity,
-        decoration:  const BoxDecoration(
-          color:  Color.fromARGB(0, 36, 140, 114),
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
-          ),
-        ),
         child: DefaultTextStyle(
           style: const TextStyle(color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const InfoCard(
-                name: 'Mama',
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const InfoCard(
+              name: 'Mama',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
+              child: Text(
+                "Browse".toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white70),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
-                child: Text(
-                  "Browse".toUpperCase(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: Colors.white70),
-                ),
-              ),
-              const Divider(height: 1.0),
-              ...menuItems.map((menuItem)=>ListTile(
-                leading: Icon(menuItem.icon),
-                title: Text(menuItem.title),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context)=>menuItem.screen),
+            ),
+            const Divider(height: 1.0),
+            ...menuItems.map((menuItem) => ListTile(
+                  leading: Icon(menuItem.icon),
+                  title: Text(menuItem.title),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => menuItem.screen),
                     );
-                },
-                
-              ))
-
-            ]
-        ),
+                  },
+                ))
+          ]),
         ),
       ),
     );
   }
 }
+
 class MenuItem {
   final IconData icon;
   final String title;
   final Widget screen;
-  const MenuItem({required this.icon, required this.title, required this.screen});
+  const MenuItem(
+      {required this.icon, required this.title, required this.screen});
 }
 
-final List<MenuItem> menuItems= [
+final List<MenuItem> menuItems = [
   const MenuItem(icon: Icons.home, title: 'Home', screen: HomePage()),
   const MenuItem(icon: Icons.food_bank, title: 'Recipe', screen: RecipePage()),
   const MenuItem(icon: Icons.chat, title: 'Ask Me', screen: ChatPage()),
-  const MenuItem(icon: Icons.bedroom_baby, title: 'Milestones', screen: MilestonePage()),
+  const MenuItem(
+      icon: Icons.bedroom_baby, title: 'Milestones', screen: MilestonePage()),
 ];
