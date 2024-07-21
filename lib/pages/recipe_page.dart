@@ -28,10 +28,10 @@ class _RecipePageState extends State<RecipePage> {
       String age = ageController.text;
       String products = productsController.text.isNotEmpty
           ? productsController.text
-          : 'only with the ingredients suitable for baby\'s age';
+          : 'only using healthy ingredients';
       final content = [
         Content.text(
-            'Create a baby recipe for a baby aged $age months using these products: $products')
+            'Create a baby recipe for a $age months baby using these products: $products.')
       ];
 
       final response = await model.generateContent(content);
