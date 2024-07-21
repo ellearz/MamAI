@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     try {
       final content = [
         Content.text(
-            'I am a Mom.Generate for me one sentence motivational quote')
+            'I am a Mom, generate for me uplifting my spirit short quote, every time a new quote.')
       ];
       final response = await model.generateContent(content,
           generationConfig: generationConfig);
