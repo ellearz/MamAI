@@ -17,7 +17,7 @@ class _MilestonePageState extends State<MilestonePage> {
     'Rolling Over',
     'Babbles',
     'Sitting Without Support',
-    'First Word - Mama or Papa',
+    'First Word ',
     'Crawling',
     'First Step',
     'Laughing'

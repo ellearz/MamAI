@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     try {
       final content = [
         Content.text(
-            'I am a Mom, generate for me uplifting my spirit short quote, every time a new quote.')
+            'Can you generate a very short inspirational quote about a mom?')
       ];
       final response = await model.generateContent(content,
           generationConfig: generationConfig);
@@ -72,18 +72,22 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromARGB(255, 213, 190, 190),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      _quote,
-                      style: const TextStyle(
-                        fontSize: 18,
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Text(
+                          _quote,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(

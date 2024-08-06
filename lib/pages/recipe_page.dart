@@ -31,7 +31,7 @@ class _RecipePageState extends State<RecipePage> {
           : 'only using healthy ingredients';
       final content = [
         Content.text(
-            'Create a baby recipe for a $age months baby using these products: $products.')
+            'Create a very short baby recipe for a $age months baby using these products: $products.')
       ];
 
       final response = await model.generateContent(content);

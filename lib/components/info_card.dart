@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mother_ai/pages/home_page.dart';
+import 'package:mother_ai/pages/auth_page.dart';
+
 
 
 
@@ -17,7 +18,7 @@ class InfoCard extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()), // Pass name to next screen (optional)
+      MaterialPageRoute(builder: (context) => const AuthPage()), // Pass name to next screen (optional)
         ),
       child: ListTile(
         leading: const CircleAvatar(

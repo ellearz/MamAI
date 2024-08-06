@@ -18,7 +18,7 @@ class _ChatPageState extends State<ChatPage> {
   final model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: myApiKey!,
-      generationConfig: GenerationConfig(maxOutputTokens: 400));
+      generationConfig: GenerationConfig(maxOutputTokens: 1000));
 
   // Replace with your actual API key
 
