@@ -70,11 +70,12 @@ Introducing subscription plans to unlock premium features and exclusive content.
 
 
 
+
 This app can be run both with IOS and Android Emulators
 
 To enable the Gemini API service, please follow these steps:
 
-Open the lib/components/constant.dart file in your project.
+Open the 'lib/components/constant.dart' file in your project.
 Insert your Gemini API key by modifying the apiKey variable as shown below:
 
    ```sh
@@ -83,7 +84,6 @@ Insert your Gemini API key by modifying the apiKey variable as shown below:
 
 
 
-
-## Contact
+###Contact
 
 For any questions or suggestions, feel free to contact us directly at earzybaeva@gmail.com.
